@@ -25,24 +25,22 @@ namespace RPG.Control
         {
             InteractWithAnimation();
             
+            if (!Input.GetMouseButtonDown(0))
+                return;
+            
             if (InteractWithCombat())
                 return;
 
             if (InteractWithMovement())
                 return;
-            
-            Debug.Log("Nothing to do");
         }
 
         private bool InteractWithMovement()
         {
-            if (!Input.GetMouseButton(0))
-                return false;
-            
             bool isMovementValid = Physics.Raycast(GetMouseRay(), out RaycastHit hit);
             
             if (isMovementValid)
-                mover.MoveTo(hit.point);
+                mover.StartMoveAction(hit.point);
 
             return isMovementValid;
         }
@@ -54,9 +52,6 @@ namespace RPG.Control
 
         private bool InteractWithCombat()
         {
-            if (!Input.GetMouseButtonDown(0))
-                return false;
-            
             var size = Physics.RaycastNonAlloc(GetMouseRay(), raycastHits);
             for (int i = 0; i < size; i++)
             {
